@@ -15,8 +15,7 @@
 
         <div class="card shadow-sm">
             <div class="card-body p-4">
-                {{-- TODO 8: Tambahkan atribut enctype="multipart/form-data" pada form di bawah ini --}}
-                <form action="{{ route('buku.update', $buku->id) }}" method="POST">
+                <form action="{{ route('buku.update', $buku->id) }}" method="POST" enctype="multipart/form-data">
                     @csrf
                     @method('PUT')
 
@@ -64,7 +63,25 @@
                         </div>
                     </div>
 
-                    {{-- TODO 8: Tampilkan gambar sampul saat ini ($buku->cover) dan sediakan input file untuk mengganti sampul --}}
+                    <div class="mb-4">
+                        <label class="form-label fw-semibold d-block">Sampul Saat Ini</label>
+                        @if($buku->cover)
+                            <div class="mb-2">
+                                <img src="{{ asset('storage/' . $buku->cover) }}" alt="{{ $buku->judul }}" class="img-thumbnail" style="max-height: 160px;">
+                            </div>
+                        @else
+                            <div class="mb-2">
+                                <span class="badge bg-secondary">Belum ada sampul</span>
+                            </div>
+                        @endif
+
+                        <label for="cover" class="form-label fw-semibold mt-2">Ganti Sampul (Opsional)</label>
+                        <input type="file" class="form-control @error('cover') is-invalid @enderror" id="cover" name="cover" accept="image/jpeg,image/png,image/jpg">
+                        <small class="text-muted">Biarkan kosong jika tidak ingin mengubah sampul. Format: JPG, JPEG, PNG. Maks: 2 MB.</small>
+                        @error('cover')
+                            <div class="invalid-feedback">{{ $message }}</div>
+                        @enderror
+                    </div>
 
                     <div class="d-flex justify-content-end gap-2">
                         <a href="{{ route('buku.index') }}" class="btn btn-light border px-4">Batal</a>
@@ -78,4 +95,3 @@
     </div>
 </div>
 @endsection
-
